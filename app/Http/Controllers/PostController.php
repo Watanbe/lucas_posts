@@ -110,10 +110,20 @@ class PostController extends Controller
 
     private function saveBase64Image($base64Image)
     {
-        // Decode the base64 image
-        $image = base64_decode($base64Image);
-        $imageName = Str::random(10) . '.png';
+        // Extract the image extension from the base64 string
+        preg_match("/^data:image\/(.*);base64/i", $base64Image, $match);
+        $extension = $match[1]; // Get the extension from the base64 data
+
+        // Remove the base64 prefix to get the actual image data
+        $image = base64_decode(preg_replace('/^data:image\/(.*);base64,/', '', $base64Image));
+
+        // Generate a unique filename
+        $imageName = Str::random(10) . '.' . $extension;
+
+        // Define the storage path
         $path = 'images/' . $imageName;
+
+        // Store the image using the determined extension
         Storage::disk('public')->put($path, $image);
 
         return $path;

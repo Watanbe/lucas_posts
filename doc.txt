@@ -1,0 +1,28 @@
+POST
+criar novo post
+http://52.206.39.206/api/posts
+ Exemplo de body
+ {
+    "title": "Meu Post",
+    "description": "Esta é a descrição do meu post",
+    "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAvgAAAPqCAYAA ..."
+ }
+
+GET
+buscar todos os posts
+http://52.206.39.206/api/posts
+
+buscar post por id
+http://52.206.39.206/api/posts/1
+
+PUT
+Atualizar post
+http://52.206.39.206/api/posts/1
+ Exemplo de body
+ {
+    "title": "Meu Post2222",
+    "description": "Esta é a descrição do meu post222"
+ }
+
+DELETE
+http://52.206.39.206/api/posts/1
