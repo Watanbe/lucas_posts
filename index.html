@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fetch API Example</title>
+</head>
+<body>
+    <script>
+        // URL da API
+        const apiUrl = 'https://ec2-3-93-143-49.compute-1.amazonaws.com/api/posts';
+
+        // Função para fazer a requisição e exibir a resposta
+        function fetchPosts() {
+            const requestOptions = {
+                method: "GET",
+                redirect: "follow"
+            };
+
+            fetch("https://ec2-3-93-143-49.compute-1.amazonaws.com/api/posts/28", requestOptions)
+            .then((response) => response.text())
+            .then((result) => console.log(result))
+            .catch((error) => console.error(error));
+        }
+
+        // Chama a função ao carregar a página
+        window.onload = fetchPosts;
+    </script>
+</body>
+</html>
