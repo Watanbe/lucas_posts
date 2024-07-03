@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    private const PAYMENT_STATUS_CREATED = 1;
     public function register(Request $request) {
         $data = $request->validate([
             'username' => ['required', 'unique:users'],
@@ -58,6 +59,12 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('username', $data['username'])->first();
+
+        if ($user && $user->payment_status == self::PAYMENT_STATUS_CREATED) {
+            return response([
+                'message' => 'Uer not found'
+            ], 404);
+        }
 
         if (!$user || !Hash::check($data["password"], $user->password)) {
             return response([
