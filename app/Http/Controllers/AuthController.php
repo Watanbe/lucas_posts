@@ -58,11 +58,21 @@ class AuthController extends Controller
             'password' => ['required', 'min:6']
         ]);
 
+        $userLogged = User::where('is_logged_in', true)
+                            ->where('username', '!=', $data['username'])
+                            ->first();
+
+        if ($userLogged !== null) {
+            return response()->json([
+                'message' => 'Another user is already logged in'
+            ], 409);
+        }
+
         $user = User::where('username', $data['username'])->first();
 
         if ($user && $user->payment_status == self::PAYMENT_STATUS_CREATED) {
             return response([
-                'message' => 'Uer not found'
+                'message' => 'User not found'
             ], 404);
         }
 
@@ -72,11 +82,30 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $user->is_logged_in = true;
+        $user->save();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return [
             'user' => $user,
             'token' => $token
         ];
+    }
+
+    public function logout(Request $request)
+    {
+        // Obtém o usuário autenticado
+        $user = $request->user();
+
+        // Revoga todos os tokens do usuário
+        $user->tokens()->delete();
+
+        $user->is_logged_in = false;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Logged out successfully'
+        ]);
     }
 }

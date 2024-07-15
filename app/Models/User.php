@@ -24,6 +24,7 @@ class User extends Authenticatable
         'payment_status',
         'payment_checkout_uri',
         'payment_id',
+        'is_logged_in'
     ];
 
     /**
